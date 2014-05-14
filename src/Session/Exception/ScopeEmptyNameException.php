@@ -1,0 +1,26 @@
+<?php
+/**
+ * This file is part of Vegas package
+ *
+ * @author Slawomir Zytko <slawomir.zytko@gmail.com>
+ * @copyright Amsterdam Standard Sp. Z o.o.
+ * @homepage https://bitbucket.org/amsdard/vegas-cmf-session
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+ 
+namespace Vegas\Session\Exception;
+
+
+use Vegas\Session\Exception as SessionException;
+
+/**
+ * ScopeEmptyNameException is thrown when string containing name of scope is empty
+ *
+ * @package Vegas\Session\Exception
+ */
+class ScopeEmptyNameException extends SessionException
+{
+    protected $message = "Name of session scope cannot be an empty string";
+} 

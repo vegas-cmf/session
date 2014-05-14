@@ -1,0 +1,2 @@
+Vegas CMF Session Manager
+======================
