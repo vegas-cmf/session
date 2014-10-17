@@ -2,7 +2,7 @@
 /**
  * This file is part of Vegas package
  *
- * @author Slawomir Zytko <slawomir.zytko@gmail.com>
+ * @author Slawomir Zytko <slawek@amsterdam-standard.pl>
  * @copyright Amsterdam Standard Sp. Z o.o.
  * @homepage http://vegas-cmf.github.io
  *
@@ -16,7 +16,6 @@ use Phalcon\Session\Bag;
 use Vegas\Session\Exception\ScopeEmptyNameException;
 
 /**
- *
  * @see http://docs.phalconphp.com/en/latest/api/Phalcon_Session_Bag.html
  * @package Vegas\Session
  */
@@ -32,7 +31,7 @@ class Scope implements ScopeInterface
     /**
      * @var \Phalcon\Session\Bag
      */
-    protected $sessionObject;
+    protected $storage;
 
     /**
      * {@ineritdoc}
@@ -46,7 +45,7 @@ class Scope implements ScopeInterface
         }
         
         $this->name = $name;
-        $this->sessionObject = new Bag($name);
+        $this->storage = new Bag($name);
     }
 
     /**
@@ -60,9 +59,9 @@ class Scope implements ScopeInterface
     /**
      * {@inheritdoc}
      */
-    public function getSessionObject()
+    public function getStorage()
     {
-        return $this->sessionObject;
+        return $this->storage;
     }
 
     /**
@@ -70,7 +69,7 @@ class Scope implements ScopeInterface
      */
     public function set($property, $value)
     {
-        $this->sessionObject->set($property, $value);
+        $this->storage->set($property, $value);
     }
 
     /**
@@ -78,7 +77,7 @@ class Scope implements ScopeInterface
      */
     public function get($property)
     {
-        return $this->sessionObject->get($property);
+        return $this->storage->get($property);
     }
 
     /**
@@ -86,7 +85,7 @@ class Scope implements ScopeInterface
      */
     public function remove($property)
     {
-        $this->sessionObject->remove($property);
+        $this->storage->remove($property);
     }
 
     /**
@@ -94,7 +93,7 @@ class Scope implements ScopeInterface
      */
     public function destroy()
     {
-        $this->sessionObject->destroy();
+        $this->storage->destroy();
     }
 
     /**
@@ -102,21 +101,48 @@ class Scope implements ScopeInterface
      */
     public function has($property)
     {
-        return $this->sessionObject->has($property);
+        return $this->storage->has($property);
     }
 
+    /**
+     * Magic setter
+     * @param $property
+     * @param $value
+     */
     public function __set($property, $value)
     {
         $this->set($property, $value);
     }
 
+    /**
+     * Magic getter
+     *
+     * @param $property
+     * @return mixed
+     */
     public function __get($property)
     {
         return $this->get($property);
     }
 
+    /**
+     * Allows to use isset directly on object
+     *
+     * @param $property
+     * @return bool|mixed
+     */
     public function __isset($property)
     {
         return $this->has($property);
+    }
+
+    /**
+     * Allows to use unset directly on object
+     *
+     * @param $property
+     */
+    public function __unset($property)
+    {
+        $this->remove($property);
     }
 } 
