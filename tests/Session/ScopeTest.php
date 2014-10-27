@@ -2,7 +2,7 @@
 /**
  * This file is part of Vegas package
  *
- * @author Slawomir Zytko <slawomir.zytko@gmail.com>
+ * @author Slawomir Zytko <slawek@amsterdam-standard.pl>
  * @copyright Amsterdam Standard Sp. Z o.o.
  * @homepage http://vegas-cmf.github.io
  *
@@ -12,20 +12,80 @@
  
 namespace Vegas\Tests\Session;
 
-use \Vegas\Session\Adapter\Mongo;
+use Vegas\Tests\FakeSessionAdapter as SessionAdapter;
 use Vegas\Session;
 use \Phalcon\DI;
 
 class ScopeTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSessionScope()
+    public static function setUpBeforeClass()
     {
-        @session_start();
+        $config = DI::getDefault()->get('config');
+        $di = DI::getDefault();
+
+        /**
+         * Start the session the first time some component request the session service
+         */
+        $di->set('session', function () use ($config) {
+            $sessionAdapter = new SessionAdapter($config->session->toArray());
+            if (!$sessionAdapter->isStarted()) {
+                $sessionAdapter->start();
+            }
+            return $sessionAdapter;
+        }, true);
+
+        $di->set('sessionManager', function() use ($di) {
+            $session = new \Vegas\Session($di->get('session'));
+
+            return $session;
+        }, true);
+
+        \Phalcon\DI::setDefault($di);
+    }
+
+    public function testSessionScopeInterfaceInstance()
+    {
+        $session = DI::getDefault()->get('sessionManager');
+        $session->addScope(new Session\Scope('test'));
+        $this->assertInstanceOf('\Vegas\Session\ScopeInterface', $session->getScope('test'));
+        $session->deleteScope('test');
+    }
+
+    public function testCreateScopeInSession()
+    {
         $session = DI::getDefault()->get('sessionManager');
 
         $session->addScope(new Session\Scope('test'));
         $this->assertTrue($session->scopeExists('test'));
-        $this->assertInstanceOf('\Vegas\Session\ScopeInterface', $session->getScope('test'));
+        $this->assertInstanceOf('\Vegas\Session\Scope', $session->getScope('test'));
+    }
+
+    public function testDeleteScopeFromSession()
+    {
+        $session = DI::getDefault()->get('sessionManager');
+
+        $session->deleteScope('test');
+        $this->assertFalse($session->scopeExists('test'));
+    }
+
+    public function testSessionShouldNotCreateTwoScopesWithTheSameName()
+    {
+        $session = DI::getDefault()->get('sessionManager');
+
+        $session->addScope(new Session\Scope('test'));
+
+        $exception = null;
+        try {
+            $session->addScope(new Session\Scope('test'));
+        } catch (\Exception $e) {
+            $exception = $e;
+        }
+        $this->assertInstanceOf('\Vegas\Session\Exception\ScopeAlreadyExistsException', $exception);
+    }
+
+    public function testSessionScopeShouldStoreValue()
+    {
+        $session = DI::getDefault()->get('sessionManager');
 
         $scope = $session->getScope('test');
         $this->assertEquals('test', $scope->getName());
@@ -36,29 +96,37 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $session->set('test', 'value1');
         $this->assertFalse($session->get('test') == $scope->get('test'));
 
+    }
+
+    public function testExceptionShouldBeThrownForNonExistingScope()
+    {
+        $session = DI::getDefault()->get('sessionManager');
+
+        $exception = null;
         try {
-            $scope2 = $session->getScope('test2');
+            $session->getScope('test2');
         } catch (\Exception $e) {
-            $this->assertInstanceOf('\Vegas\Session\Exception\ScopeNotExistsException', $e);
-            $session->addScope(new Session\Scope('test2'));
-            $scope2 = $session->getScope('test2');
+            $exception = $e;
         }
-        $this->assertInstanceOf('\Vegas\Session\ScopeInterface', $scope2);
+        $this->assertInstanceOf('\Vegas\Session\Exception\ScopeNotExistsException', $exception);
+    }
 
-        $scope2->set('test', 'value3');
-        $this->assertFalse($scope2->get('test') == $scope->get('test'));
+    public function testExceptionShouldBeThrownWhenScopeNameIsEmpty()
+    {
+        $session = DI::getDefault()->get('sessionManager');
 
-        try {
-            $session->addScope(new Session\Scope('test'));
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('\Vegas\Session\Exception\ScopeAlreadyExistsException', $e);
-        }
-
+        $exception = null;
         try {
             $session->addScope(new Session\Scope(''));
         } catch (\Exception $e) {
-            $this->assertInstanceOf('\Vegas\Session\Exception\ScopeEmptyNameException', $e);
+            $exception = $e;
         }
+        $this->assertInstanceOf('\Vegas\Session\Exception\ScopeEmptyNameException', $exception);
+    }
+
+    public function testScopeGetterSetter()
+    {
+        $scope2 = new Session\Scope('test2');
 
         $scope2->nextTest = 'nextValue';
 
@@ -72,14 +140,8 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $scope2->remove('nextTest2');
         $this->assertNull($scope2->nextTest2);
 
-        $this->assertInstanceOf('\Phalcon\Session\BagInterface', $scope2->getSessionObject());
-
-        $mongoAdapter = new Mongo(array('collection' => 'test'));
-        $session->setAdapter($mongoAdapter);
-        $this->assertInstanceOf('\Vegas\Session\Adapter\Mongo', $session->getAdapter());
-
-        $scope2->destroy();
-
-        $this->assertNull($scope->nextTest2);
+        $scope2->nextTest3 = 'nextTest3';
+        unset($scope2->nextTest3);
+        $this->assertNull($scope2->nextTest3);
     }
 } 

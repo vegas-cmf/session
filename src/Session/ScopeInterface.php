@@ -2,7 +2,7 @@
 /**
  * This file is part of Vegas package
  *
- * @author Slawomir Zytko <slawomir.zytko@gmail.com>
+ * @author Slawomir Zytko <slawek@amsterdam-standard.pl>
  * @copyright Amsterdam Standard Sp. Z o.o.
  * @homepage http://vegas-cmf.github.io
  *
@@ -26,11 +26,11 @@ interface ScopeInterface
     public function getName();
 
     /**
-     * Returns an instance of session object from current namespace
+     * Returns an instance of storage where scope stores data
      *
      * @return mixed
      */
-    public function getSessionObject();
+    public function getStorage();
 
     /**
      * Sets value by name

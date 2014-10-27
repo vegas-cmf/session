@@ -2,7 +2,7 @@
 /**
  * This file is part of Vegas package
  *
- * @author Slawomir Zytko <slawomir.zytko@gmail.com>
+ * @author Slawomir Zytko <slawek@amsterdam-standard.pl>
  * @copyright Amsterdam Standard Sp. Z o.o.
  * @homepage http://vegas-cmf.github.io
  *
@@ -12,7 +12,7 @@
 
 namespace Vegas;
 
-use Vegas\Session\Adapter\AdapterInterface;
+use Phalcon\Session\AdapterInterface;
 use Vegas\Session\Exception\ScopeAlreadyExistsException;
 use Vegas\Session\Exception\ScopeNotExistsException;
 use Vegas\Session\Scope;
@@ -118,6 +118,18 @@ final class Session
     }
 
     /**
+     * Deletes scope indicated by its name
+     *
+     * @param $name
+     */
+    public function deleteScope($name)
+    {
+        if ($this->scopeExists($name)) {
+            unset($this->storage[$name]);
+        }
+    }
+
+    /**
      * Determines session scope existing
      *
      * @param $name
@@ -125,7 +137,10 @@ final class Session
      */
     public function scopeExists($name)
     {
-        return array_key_exists($name, $this->storage) && $this->storage[$name] instanceof ScopeInterface;
+        return (array_key_exists($name, $this->storage)
+            &&
+            $this->storage[$name] instanceof ScopeInterface
+        );
     }
 
     /**
