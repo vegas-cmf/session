@@ -91,7 +91,6 @@ class Files extends \Phalcon\Session\Adapter\Files implements AdapterInterface
         );
     }
 
-
     /**
      * Returns current session cookie configuration
      * @return array
@@ -104,33 +103,33 @@ class Files extends \Phalcon\Session\Adapter\Files implements AdapterInterface
 
         // Cookie name
         $options['name'] = session_name();
-        if (!empty($this->_options['cookie']['name'])) {
-            $options['name'] = (string) $this->_options['cookie']['name'];
+        if (isset($this->_options['cookie_name']) && !empty($this->_options['cookie_name'])) {
+            $options['name'] = (string) $this->_options['cookie_name'];
         }
 
         // Cookie lifetime
-        if (!empty($this->_options['cookie']['lifetime'])) {
-            $options['lifetime'] = (int) $this->_options['cookie']['lifetime'];
+        if (isset($this->_options['cookie_lifetime']) && !empty($this->_options['cookie_lifetime'])) {
+            $options['lifetime'] = (int) $this->_options['cookie_lifetime'];
         }
 
         // Path
-        if (!empty($this->_options['cookie']['path'])) {
-            $options['path'] = (string) $this->_options['cookie']['path'];
+        if (isset($this->_options['cookie_path']) && !empty($this->_options['cookie_path'])) {
+            $options['path'] = (string) $this->_options['cookie_path'];
         }
 
         // Domain
-        if (!empty($this->_options['cookie']['domain'])) {
-            $options['domain'] = (string) $this->_options['cookie']['domain'];
+        if (isset($this->_options['cookie_domain']) && !empty($this->_options['cookie_domain'])) {
+            $options['domain'] = (string) $this->_options['cookie_domain'];
         }
 
         // Secure
-        if (!empty($this->_options['cookie']['secure'])) {
-            $options['secure'] = (bool) $this->_options['cookie']['secure'];
+        if (isset($this->_options['cookie_secure']) && !empty($this->_options['cookie_secure'])) {
+            $options['secure'] = (bool) $this->_options['cookie_secure'];
         }
 
         // Http only
-        if (!empty($this->_options['cookie']['httponly'])) {
-            $options['httponly'] = (bool) $this->_options['cookie']['httponly'];
+        if (isset($this->_options['cookie_httponly']) && !empty($this->_options['cookie_httponly'])) {
+            $options['httponly'] = (bool) $this->_options['cookie_httponly'];
         }
 
         return $options;
