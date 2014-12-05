@@ -82,13 +82,15 @@ class Files extends \Phalcon\Session\Adapter\Files implements AdapterInterface
         $options['lifetime'] = 0;
 
         // Session id
-        $id = session_id();
+//        $id = session_id();
+//
+//        // Set new cookie
+//        return setcookie(
+//            $options['name'], $id, $options['lifetime'], $options['path'],
+//            $options['domain'], $options['secure'], $options['httponly']
+//        );
 
-        // Set new cookie
-        return setcookie(
-            $options['name'], $id, $options['lifetime'], $options['path'],
-            $options['domain'], $options['secure'], $options['httponly']
-        );
+        return true;
     }
 
     /**
