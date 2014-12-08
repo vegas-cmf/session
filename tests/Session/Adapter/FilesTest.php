@@ -1,23 +1,21 @@
 <?php
 
-namespace Vegas\Session\Adapter;
-
-//function setcookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = false) {
-//    return true;
-//}
-
 namespace Vegas\Tests\Session\Adapter;
 
-use \Phalcon\DI;
-use \Vegas\Session\Adapter\Files as FilesAdapter;
+use \Phalcon\DI,
+    \Vegas\Session\Adapter\Files as FilesAdapter;
 
-
-class FilesTest extends \PHPUnit_Framework_TestCase {
+class FilesTest extends \PHPUnit_Framework_TestCase
+{
 
     /**
      * @var $di \Phalcon\DI
      */
     protected $di;
+
+    /**
+     * @var $sessionManager \Vegas\Session
+     */
     protected $sessionManager;
 
     public static function setUpBeforeClass()
@@ -45,16 +43,19 @@ class FilesTest extends \PHPUnit_Framework_TestCase {
         DI::setDefault($di);
     }
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->di = DI::getDefault();
         $this->sessionManager = $this->di->get('sessionManager');
     }
 
-    public function testSessionShouldNotStartAgain() {
+    public function testSessionShouldNotStartAgain()
+    {
         $this->assertFalse($this->sessionManager->start());
     }
 
-    public function testCookieParamsAfterAdapterStart() {
+    public function testCookieParamsAfterAdapterStart()
+    {
         $sessionConfig = $this->di->get('config')->session;
         $sessionParams = session_get_cookie_params();
 
@@ -66,15 +67,19 @@ class FilesTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($sessionConfig->cookie_httponly, $sessionParams['httponly']);
     }
 
-    public function testIfShortLifetimeWasChanged() {
-        $this->assertTrue($this->sessionManager->getAdapter()->setShortLifetime());
+    public function testIfShortLifetimeWasChanged()
+    {
+        $this->assertTrue($this->sessionManager->setShortLifetime());
     }
 
-    public function testIfCookieWasDestroyed() {
+    public function testIfCookieWasDestroyed()
+    {
         $this->assertTrue($this->sessionManager->destroy());
     }
 
-    public function testIfShortLifetimeWasNotChanged() {
+    public function testIfShortLifetimeWasNotChanged()
+    {
         $this->assertFalse($this->sessionManager->setShortLifetime());
     }
+
 }
