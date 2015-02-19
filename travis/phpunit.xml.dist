@@ -18,6 +18,7 @@
         stopOnSkipped="false"
 
         strict="false"
+        stderr="true"
         verbose="true"
         bootstrap="../tests/bootstrap.php">
     <testsuites>

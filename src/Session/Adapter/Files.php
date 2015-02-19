@@ -81,7 +81,7 @@ class Files extends \Phalcon\Session\Adapter\Files implements AdapterInterface
         // Short session, will be finished after browser will be closed
         $options['lifetime'] = 0;
 
-        // Session id
+        //Session id
         $id = session_id();
 
         // Set new cookie

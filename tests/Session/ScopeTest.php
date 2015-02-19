@@ -51,13 +51,21 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $session->deleteScope('test');
     }
 
-    public function testCreateScopeInSession()
+    public function testAddScopeInSession()
     {
         $session = DI::getDefault()->get('sessionManager');
 
         $session->addScope(new Session\Scope('test'));
         $this->assertTrue($session->scopeExists('test'));
         $this->assertInstanceOf('\Vegas\Session\Scope', $session->getScope('test'));
+    }
+
+    public function testCreateScopeInSession()
+    {
+        $session = DI::getDefault()->get('sessionManager');
+
+        $this->assertInstanceOf('\Vegas\Session\Scope', $session->createScope('testCreateScope'));
+        $this->assertTrue($session->scopeExists('testCreateScope'));
     }
 
     public function testDeleteScopeFromSession()
@@ -144,4 +152,24 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         unset($scope2->nextTest3);
         $this->assertNull($scope2->nextTest3);
     }
+
+    public function testScopeStorageGetter() {
+        $scope = new Session\Scope('testScope');
+        $this->assertInstanceOf('\Phalcon\Session\Bag', $scope->getStorage());
+    }
+
+    public function testScopeDestroy()
+    {
+        $scope = new Session\Scope('testScope');
+        $this->assertNull($scope->destroy());
+    }
+
+    public function testSessionAdapterSetter() {
+        $session = DI::getDefault()->get('sessionManager');
+        $adapter = new SessionAdapter();
+
+        $session->setAdapter($adapter);
+        $this->assertInstanceOf('\Vegas\Tests\FakeSessionAdapter', $session->getAdapter());
+    }
+
 } 
