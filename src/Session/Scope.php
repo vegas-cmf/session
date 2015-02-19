@@ -145,4 +145,4 @@ class Scope implements ScopeInterface
     {
         $this->remove($property);
     }
-} 
+}

@@ -81,5 +81,4 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->sessionManager->setShortLifetime());
     }
-
 }

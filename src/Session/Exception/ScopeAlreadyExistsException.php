@@ -23,4 +23,4 @@ use Vegas\Session\Exception as SessionException;
 class ScopeAlreadyExistsException extends SessionException
 {
     protected $message = "Session namespace already exists";
-} 
+}
