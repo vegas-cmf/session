@@ -23,4 +23,4 @@ use Vegas\Session\Exception as SessionException;
 class ScopeEmptyNameException extends SessionException
 {
     protected $message = "Name of session scope cannot be an empty string";
-} 
+}

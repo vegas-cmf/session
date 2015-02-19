@@ -21,4 +21,4 @@ use \Vegas\Exception as VegasException;
 class Exception extends VegasException
 {
     protected $message = "Session exception";
-} 
+}

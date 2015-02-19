@@ -70,4 +70,4 @@ interface ScopeInterface
      * @return mixed
      */
     public function destroy();
-} 
+}

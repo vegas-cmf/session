@@ -134,4 +134,4 @@ class Files extends \Phalcon\Session\Adapter\Files implements AdapterInterface
 
         return $options;
     }
-} 
+}

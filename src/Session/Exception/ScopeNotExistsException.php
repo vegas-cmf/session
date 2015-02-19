@@ -23,4 +23,4 @@ use Vegas\Session\Exception as SessionException;
 class ScopeNotExistsException extends SessionException
 {
     protected $message = "Indicated session scope does not exist in session storage";
-} 
+}
