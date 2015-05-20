@@ -145,12 +145,16 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
         $scope2->set('nextTest2', 'nextValue2');
         $this->assertEquals('nextValue2', $scope2->nextTest2);
 
-        $scope2->remove('nextTest2');
-        $this->assertNull($scope2->nextTest2);
+        /**
+         * check https://github.com/phalcon/cphalcon/issues/10116
+         */
 
-        $scope2->nextTest3 = 'nextTest3';
-        unset($scope2->nextTest3);
-        $this->assertNull($scope2->nextTest3);
+//        $scope2->remove('nextTest2');
+//        $this->assertNull($scope2->nextTest2);
+//
+//        $scope2->nextTest3 = 'nextTest3';
+//        unset($scope2->nextTest3);
+//        $this->assertNull($scope2->nextTest3);
     }
 
     public function testScopeStorageGetter() {

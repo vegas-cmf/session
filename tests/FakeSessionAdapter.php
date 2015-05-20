@@ -49,7 +49,7 @@ class FakeSessionAdapter implements \Phalcon\Session\AdapterInterface
      *
      * @param array $options
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         self::$options = $options;
     }
