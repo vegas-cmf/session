@@ -12,6 +12,8 @@
 
 namespace Vegas\Tests;
 
+use Phalcon\Session\AdapterInterface;
+
 class FakeSessionAdapter implements \Phalcon\Session\AdapterInterface
 {
     private static $sessionStorage = array();
@@ -21,6 +23,8 @@ class FakeSessionAdapter implements \Phalcon\Session\AdapterInterface
     private static $options = array();
 
     private static $id = null;
+
+    private static $name = null;
 
     /**
      * Starts session, optionally using an adapter
@@ -38,6 +42,10 @@ class FakeSessionAdapter implements \Phalcon\Session\AdapterInterface
         self::$sessionStorage = array();
         self::$id = uniqid();
         self::$started = true;
+
+        if (isset($options['name'])) {
+            $this->setName($options['name']);
+        }
 
         session_id(self::$id);
 
@@ -162,5 +170,55 @@ class FakeSessionAdapter implements \Phalcon\Session\AdapterInterface
     public function __unset($name)
     {
         $this->remove($name);
+    }
+
+    /**
+     * Set session name
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        self::$name = $name;
+    }
+
+    /**
+     * Get session name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        self::$name;
+    }
+
+    /**
+     * \Phalcon\Session construtor
+     *
+     * @param array $options
+     */
+    public function __construct($options = null)
+    {
+        self::$options = $options;
+        if (isset($options['name'])) {
+            $this->setName($options['name']);
+        }
+    }
+
+    /**
+     * Regenerate session's id
+     *
+     * @param bool $deleteOldSession
+     * @return AdapterInterface
+     */
+    public function regenerateId($deleteOldSession = true)
+    {
+        if ($deleteOldSession) {
+            $this->destroy();
+        }
+
+        $this->start();
+
+        return $this;
     }
 }
