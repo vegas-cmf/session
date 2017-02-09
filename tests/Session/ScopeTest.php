@@ -14,14 +14,14 @@ namespace Vegas\Tests\Session;
 
 use Vegas\Tests\FakeSessionAdapter as SessionAdapter;
 use Vegas\Session;
-use \Phalcon\DI;
+use \Phalcon\Di;
 
 class ScopeTest extends \PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {
-        $config = DI::getDefault()->get('config');
-        $di = DI::getDefault();
+        $config = Di::getDefault()->get('config');
+        $di = Di::getDefault();
 
         /**
          * Start the session the first time some component request the session service
@@ -40,12 +40,12 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
             return $session;
         }, true);
 
-        \Phalcon\DI::setDefault($di);
+        \Phalcon\Di::setDefault($di);
     }
 
     public function testSessionScopeInterfaceInstance()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
         $session->addScope(new Session\Scope('test'));
         $this->assertInstanceOf('\Vegas\Session\ScopeInterface', $session->getScope('test'));
         $session->deleteScope('test');
@@ -53,7 +53,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 
     public function testAddScopeInSession()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
 
         $session->addScope(new Session\Scope('test'));
         $this->assertTrue($session->scopeExists('test'));
@@ -62,7 +62,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateScopeInSession()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
 
         $this->assertInstanceOf('\Vegas\Session\Scope', $session->createScope('testCreateScope'));
         $this->assertTrue($session->scopeExists('testCreateScope'));
@@ -70,7 +70,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteScopeFromSession()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
 
         $session->deleteScope('test');
         $this->assertFalse($session->scopeExists('test'));
@@ -78,7 +78,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 
     public function testSessionShouldNotCreateTwoScopesWithTheSameName()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
 
         $session->addScope(new Session\Scope('test'));
 
@@ -93,7 +93,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 
     public function testSessionScopeShouldStoreValue()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
 
         $scope = $session->getScope('test');
         $this->assertEquals('test', $scope->getName());
@@ -108,7 +108,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionShouldBeThrownForNonExistingScope()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
 
         $exception = null;
         try {
@@ -121,7 +121,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionShouldBeThrownWhenScopeNameIsEmpty()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
 
         $exception = null;
         try {
@@ -169,7 +169,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testSessionAdapterSetter() {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
         $adapter = new SessionAdapter();
 
         $session->setAdapter($adapter);

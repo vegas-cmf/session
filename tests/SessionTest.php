@@ -13,15 +13,15 @@
 namespace Vegas\Tests;
 
 use Vegas\Tests\FakeSessionAdapter as SessionAdapter;
-use \Phalcon\DI;
+use \Phalcon\Di;
 use \Vegas\Session;
 
 class SessionTest extends \PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {
-        $config = DI::getDefault()->get('config');
-        $di = DI::getDefault();
+        $config = Di::getDefault()->get('config');
+        $di = Di::getDefault();
 
         /**
          * Start the session the first time some component request the session service
@@ -40,12 +40,12 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             return $session;
         }, true);
 
-        \Phalcon\DI::setDefault($di);
+        \Phalcon\Di::setDefault($di);
     }
 
     public function testSessionShouldNotStartAgain()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
         $this->assertInstanceOf('\Phalcon\Session\AdapterInterface', $session->getAdapter());
         $this->assertInstanceOf('\Vegas\Tests\FakeSessionAdapter', $session->getAdapter());
         $this->assertFalse($session->start());
@@ -53,13 +53,13 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testSessionShouldBeStarted()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
         $this->assertTrue($session->isStarted());
     }
 
     public function testSessionShouldStoreValue()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
         $session->set('test_val', 'foo');
         $this->assertTrue($session->has('test_val'));
         $this->assertEquals('foo', $session->get('test_val'));
@@ -70,7 +70,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testSessionIdShouldBeIdenticalWithSessionIdFunction()
     {
-        $session = DI::getDefault()->get('sessionManager');
+        $session = Di::getDefault()->get('sessionManager');
         $this->assertEquals(session_id(), $session->getId());
     }
 } 

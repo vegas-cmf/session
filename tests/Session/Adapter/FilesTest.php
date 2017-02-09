@@ -2,14 +2,14 @@
 
 namespace Vegas\Tests\Session\Adapter;
 
-use \Phalcon\DI,
+use \Phalcon\Di,
     \Vegas\Session\Adapter\Files as FilesAdapter;
 
 class FilesTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var $di \Phalcon\DI
+     * @var $di \Phalcon\Di
      */
     protected $di;
 
@@ -20,7 +20,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        $di = DI::getDefault();
+        $di = Di::getDefault();
         $config = $di->get('config');
 
         /**
@@ -40,12 +40,12 @@ class FilesTest extends \PHPUnit_Framework_TestCase
             return $session;
         }, true);
 
-        DI::setDefault($di);
+        Di::setDefault($di);
     }
 
     public function setUp()
     {
-        $this->di = DI::getDefault();
+        $this->di = Di::getDefault();
         $this->sessionManager = $this->di->get('sessionManager');
     }
 

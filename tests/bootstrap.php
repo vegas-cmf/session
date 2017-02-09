@@ -7,10 +7,10 @@ define('TESTS_ROOT_DIR', dirname(__FILE__));
 $configArray = require_once dirname(__FILE__) . '/config.php';
 
 $config = new \Phalcon\Config($configArray);
-$di = new \Phalcon\DI\FactoryDefault();
+$di = new \Phalcon\Di\FactoryDefault();
 
 $di->set('config', function() use ($config) {
     return $config;
 });
 
-\Phalcon\DI::setDefault($di);
+\Phalcon\Di::setDefault($di);
