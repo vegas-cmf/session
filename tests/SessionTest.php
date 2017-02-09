@@ -16,9 +16,9 @@ use Vegas\Tests\FakeSessionAdapter as SessionAdapter;
 use \Phalcon\Di;
 use \Vegas\Session;
 
-class SessionTest extends \PHPUnit_Framework_TestCase
+class SessionTestDiResolver
 {
-    public static function setUpBeforeClass()
+    public function resolve()
     {
         $config = Di::getDefault()->get('config');
         $di = Di::getDefault();
@@ -40,7 +40,15 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             return $session;
         }, true);
 
-        \Phalcon\Di::setDefault($di);
+        Di::setDefault($di);
+    }
+}
+
+class SessionTest extends \PHPUnit_Framework_TestCase
+{
+    public static function setUpBeforeClass()
+    {
+        (new SessionTestDiResolver)->resolve();
     }
 
     public function testSessionShouldNotStartAgain()

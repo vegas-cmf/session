@@ -5,20 +5,9 @@ namespace Vegas\Tests\Session\Adapter;
 use \Phalcon\Di,
     \Vegas\Session\Adapter\Files as FilesAdapter;
 
-class FilesTest extends \PHPUnit_Framework_TestCase
+class FilesTestDiResolver
 {
-
-    /**
-     * @var $di \Phalcon\Di
-     */
-    protected $di;
-
-    /**
-     * @var $sessionManager \Vegas\Session
-     */
-    protected $sessionManager;
-
-    public static function setUpBeforeClass()
+    public function resolve()
     {
         $di = Di::getDefault();
         $config = $di->get('config');
@@ -41,6 +30,25 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         }, true);
 
         Di::setDefault($di);
+    }
+}
+
+class FilesTest extends \PHPUnit_Framework_TestCase
+{
+
+    /**
+     * @var $di \Phalcon\Di
+     */
+    protected $di;
+
+    /**
+     * @var $sessionManager \Vegas\Session
+     */
+    protected $sessionManager;
+
+    public static function setUpBeforeClass()
+    {
+        (new FilesTestDiResolver)->resolve();
     }
 
     public function setUp()
