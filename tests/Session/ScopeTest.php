@@ -97,6 +97,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
             $exception = $e;
         }
         $this->assertInstanceOf('\Vegas\Session\Exception\ScopeAlreadyExistsException', $exception);
+        $this->assertNotEmpty($exception->getMessage());
     }
 
     public function testSessionScopeShouldStoreValue()
@@ -125,6 +126,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
             $exception = $e;
         }
         $this->assertInstanceOf('\Vegas\Session\Exception\ScopeNotExistsException', $exception);
+        $this->assertNotEmpty($exception->getMessage());
     }
 
     public function testExceptionShouldBeThrownWhenScopeNameIsEmpty()
@@ -138,6 +140,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
             $exception = $e;
         }
         $this->assertInstanceOf('\Vegas\Session\Exception\ScopeEmptyNameException', $exception);
+        $this->assertNotEmpty($exception->getMessage());
     }
 
     public function testScopeGetterSetter()
